@@ -24,7 +24,7 @@ export function Header() {
       <button
         type="button"
         onClick={downloadAllArchives}
-        className="flex items-center gap-3 py-4 px-8 bg-white rounded-lg font-normal text-base text-gray-400 font-outfit hover:cursor-pointer hover:brightness-[.993] transition-all	 disabled:cursor-not-allowed"
+        className="flex items-center gap-3 py-4 px-8 bg-white rounded-lg font-normal text-base text-gray-400 font-outfit hover:cursor-pointer hover:brightness-[.993] transition-all disabled:opacity-65 disabled:cursor-not-allowed"
         disabled={!archives.files || archives.files.length === 0}
       >
         Download all <DownloadSimple className="size-6 text-brand-green" />
