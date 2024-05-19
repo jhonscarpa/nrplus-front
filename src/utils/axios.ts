@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { ENV } from './env'
 
 export const api = axios.create({
-  baseURL: 'http://54.232.62.196:3333',
+  baseURL: ENV.VITE_DATABASE_URL,
 
   headers: { 'Content-Type': 'application/json' },
 })

@@ -15,6 +15,8 @@ interface IPropsFileContext {
   archives: IPropsFilesRequest
   updateListFiles: (files: IPropsFile[]) => void
   loadingGetFiles: boolean
+  loadingNextPage: boolean
+  nextPage: () => void
 }
 
 export const FilesContext = createContext({} as IPropsFileContext)
@@ -28,6 +30,7 @@ export function FilesContextProvider({ children }: IPropsFilesContextProvider) {
     {} as IPropsFilesRequest,
   )
   const [loadingGetFiles, setLoadingGetFiles] = useState(false)
+  const [loadingNextPage, setLoadingNextPage] = useState(false)
 
   useEffect(() => {
     getFiles()
@@ -59,6 +62,35 @@ export function FilesContextProvider({ children }: IPropsFilesContextProvider) {
     }
   }
 
+  async function nextPage() {
+    setLoadingNextPage(true)
+    try {
+      const response = await api.get(filesRoutes.LIST_FILES, {
+        params: {
+          page: archives.page + 1,
+          pageSize: 10,
+        },
+      })
+      const typeArchive = response.data.files.map((file: IPropsFile) => {
+        const type = file.Key.split('.')[file.Key.split('.').length - 1]
+        return {
+          ...file,
+          typeArchive: type,
+        }
+      })
+      setArchives({
+        ...response.data,
+        files: [...typeArchive, ...archives.files],
+      })
+      setLoadingNextPage(false)
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.log(error.message)
+        setLoadingNextPage(false)
+      }
+    }
+  }
+
   function updateListFiles(files: IPropsFile[]): void {
     if (!archives.files) {
       getFiles()
@@ -69,7 +101,13 @@ export function FilesContextProvider({ children }: IPropsFilesContextProvider) {
 
   return (
     <FilesContext.Provider
-      value={{ archives, updateListFiles, loadingGetFiles }}
+      value={{
+        archives,
+        updateListFiles,
+        loadingGetFiles,
+        nextPage,
+        loadingNextPage,
+      }}
     >
       {children}
     </FilesContext.Provider>

@@ -30,6 +30,7 @@ export function DropZoneInput() {
         }
       })
       updateListFiles(typeArchive)
+      handleToast(false, response.data.message)
     } catch (error) {
       if (error instanceof AxiosError) {
         handleToast(true, error.response?.data.message)
