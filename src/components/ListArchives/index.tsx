@@ -9,10 +9,12 @@ export function ListArchives() {
   return (
     <div className="w-full h-auto flex flex-col gap-8">
       <span className="font-outfit font-light text-2xl text-black">
-        {archives.files ? 'Upload list' : 'Empty States'}
+        {archives.files && archives.files.length > 0
+          ? 'Upload list'
+          : 'Empty States'}
       </span>
       <div className="h-[40rem] bg-[#FBFBFB] px-14 pt-12 pb-28 overflow-auto scroll-smooth scrollbar-thumb-[#F3EFEF]  scrollbar-track-white scrollbar-thin">
-        {archives.files ? (
+        {archives.files && archives.files.length > 0 ? (
           <ul className="flex flex-col gap-8 h-auto ">
             {archives.files.map(file => (
               <FileListItem key={file.Key} file={file} />
